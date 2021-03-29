@@ -7,41 +7,16 @@ typedef pair<int, int> pi;
 
 class Solution {
 public:
-    // int maxSubArray(vi& nums) {
-    //     // Brute Force, Time: O(n^2), Space: O(1)
-    //     int n = nums.size();
-    //     int ans = INT_MIN;
-    //     for(int i=0; i<n; i++) {
-    //         int sum = 0;
-    //         for(int j=i; j<n; j++) {
-    //             sum += nums[j];
-    //             ans = max(ans, sum);
-    //         }
-    //     }
-    //     return ans;
-    // }
-    // int maxSubArray(vi& nums) {
-    //     // DP, Time: O(n), Space: O(n)
-    //     /*  dp[i]: max sum of sub-array from 0 to i include i
-    //         dp[i] = max(dp[i-1]+nums[i], nums[i])
-    //         dp[0] = nums[0] */
-    //     int n = nums.size();
-    //     int dp[n];
-    //     dp[0] = nums[0];
-
-    //     for(int i=1; i<n; i++) {
-    //         dp[i] = max(dp[i-1]+nums[i], nums[i]);
-    //     }
-
-    //     return *max_element(dp, dp+n);
-    // }
-    int maxSubArray(vi& nums) {
-        // DP, Time: O(n), Space: O(1)
+    int maxSubArray(vector<int>& nums) {
         int n = nums.size();
-        int sum = nums[0], ans = nums[0];
-        for(int i=1; i<n; i++) {
-            sum = max(sum+nums[i], nums[i]);
-            ans = max(ans, sum);
+        ll prefixsum = 0; // sum in [0, i]
+        ll curmin = 0; // min of all prefixsum in [0, 0], [0, 1], [0, 2],..., [0, i-1]
+        // prefixsum - curmin = max subarray sum end at i
+        ll ans = -1e18;
+        for(int i = 0; i < n; ++i) {
+            prefixsum += nums[i];
+            ans = max(ans, prefixsum - curmin);
+            curmin = min(curmin, prefixsum);
         }
         return ans;
     }
