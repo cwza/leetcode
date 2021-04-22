@@ -17,18 +17,22 @@ struct TreeNode {
 
 class Solution {
 public:
-    TreeNode* helper(int preStart, int inStart, int inEnd, vi &preorder, vi &inorder, unordered_map<int, int> &numToIdx) {
-        if(inEnd < inStart) return nullptr;
-        TreeNode *node = new TreeNode(preorder[preStart]);
-        int mid = numToIdx[node->val];
-        node->left = helper(preStart+1, inStart, mid-1, preorder, inorder, numToIdx);
-        node->right = helper(preStart+mid-inStart+1, mid+1, inEnd, preorder, inorder, numToIdx);
-        return node;
+    int prei = 0;
+    vector<int> pre, in;
+    map<int, int> numToIdx;
+    TreeNode* helper(int ini, int inj) {
+        int rootval = pre[prei];
+        prei++;
+        TreeNode *root = new TreeNode(rootval);
+        int k = numToIdx[rootval];
+        if(ini <= k-1) root->left = helper(ini, k-1);
+        if(k+1 <= inj) root->right = helper(k+1, inj);
+        return root;
     }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        unordered_map<int, int> numToIdx;
-        for(int i = 0; i < inorder.size(); i++) numToIdx[inorder[i]] = i;
-        return helper(0, 0, inorder.size()-1, preorder, inorder, numToIdx);
+        pre = preorder, in = inorder;
+        for(int i = 0; i < in.size(); i++) numToIdx[in[i]] = i;
+        return helper(0, in.size()-1);
     }
 };
 

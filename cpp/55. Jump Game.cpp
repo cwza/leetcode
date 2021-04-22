@@ -29,18 +29,15 @@ typedef pair<int, int> pi;
 // };
 
 class Solution {
-// Greedy
 public:
     bool canJump(vector<int>& nums) {
-        // Time: O(n), Space: O(1)
+        int maxReachable = 0;
         int n = nums.size();
-        int mostLeftT = n-1;
-        for(int i = n-2; i >= 0; i--) {
-            if(i+nums[i]>=mostLeftT) {
-                mostLeftT = i;
-            }
+        for(int i = 0; i < n; ++i) {
+            if(i>maxReachable) return false;
+            maxReachable = max(maxReachable, i+nums[i]);
         }
-        return mostLeftT == 0;
+        return true;
     }
 };
 

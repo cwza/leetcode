@@ -5,23 +5,43 @@ typedef vector<int> vi;
 typedef vector<vector<int>> vvi;
 typedef pair<int, int> pi;
 
-class Solution {
-// DP, Time: O(nm), Space: O(nm)
-public:
-    int minPathSum(vector<vector<int>>& grid) {
-        int m = grid.size()+1, n = grid[0].size()+1;
-        int dp[m][n]; fill(&dp[0][0], &dp[0][0]+m*n, INT_MAX);
+// Push DP
+// class Solution {
+// public:
+//     vector<vector<int>> dp;
+//     int n, m;
+//     int minPathSum(vector<vector<int>>& grid) {
+//         int m = grid.size();
+//         int n = grid[0].size();
+//         dp = vector<vector<int>>(m, vector<int>(n, 1e9));
+//         dp[0][0] = grid[0][0];
+//         for(int i = 0; i < m; ++i) {
+//             for(int j = 0; j < n; ++j) {
+//                 if(j+1<n) dp[i][j+1] = min(dp[i][j+1], dp[i][j]+grid[i][j+1]);
+//                 if(i+1<m) dp[i+1][j] = min(dp[i+1][j], dp[i][j]+grid[i+1][j]);
+//             }
+//         }
+//         return dp[m-1][n-1];
+//     }
+// };
 
-        for(int i=1; i<m; i++) {
-            for(int j=1; j<n; j++) {
-                if(i==1 && j==1) {
-                    dp[i][j] = grid[i-1][j-1];
-                } else {
-                    dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i-1][j-1];
-                }
-                // cout << dp[i][j] << " ";
+// Pull DP
+class Solution {
+public:
+    vector<vector<int>> dp;
+    int n, m;
+    int minPathSum(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        dp = vector<vector<int>>(m, vector<int>(n, 1e9));
+        dp[0][0] = grid[0][0];
+        for(int i = 0; i < m; ++i) {
+            for(int j = 0; j < n; ++j) {
+                if(i==0 && j==0) continue;
+                if(i-1>=0) dp[i][j] = min(dp[i][j], dp[i-1][j]);
+                if(j-1>=0) dp[i][j] = min(dp[i][j], dp[i][j-1]);
+                dp[i][j] += grid[i][j];
             }
-            // cout << endl;
         }
         return dp[m-1][n-1];
     }

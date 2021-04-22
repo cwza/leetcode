@@ -20,16 +20,18 @@ So 1+4+2=7
 */
 
 class Solution {
-// Prefix Sum, Time: O(n), Space: O(n)
 public:
     int subarraySum(vector<int>& nums, int k) {
-        int ans = 0, total = 0;
-        unordered_map<int, int> counter;
+        map<int, int> mp;
+        mp[0] = 1;
+        int prefix = 0;
+        int ans = 0;
         for(int num : nums) {
-            total += num;
-            if(total == k) ans++;
-            if(counter.count(total-k)) ans += counter[total-k];
-            counter[total]++;
+            prefix += num;
+            if(mp.count(prefix-k)) {
+                ans += mp[prefix-k];
+            }
+            mp[prefix]++;
         }
         return ans;
     }

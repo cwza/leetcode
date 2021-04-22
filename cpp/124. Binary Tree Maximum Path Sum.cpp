@@ -1,9 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
-typedef pair<int, int> pi;
+#define ll long long
+#define ar array
 
 
 struct TreeNode {
@@ -16,24 +14,21 @@ struct TreeNode {
 };
 
 class Solution {
+    int ans = -1e9;
 public:
-    int ans = 0;
-    int dfs(TreeNode *root) { // return the depth of root
-        int d = 0, dd = 0;
+    int dfs(TreeNode* root) {
+        int tmp = root->val;
+        int l = 0, r = 0;
         if(root->left) {
-            int d1 = dfs(root->left);
-            dd += d1+1;
-            d = max(d, d1+1);
+            l = dfs(root->left);
         }
         if(root->right) {
-            int d2 = dfs(root->right);
-            dd += d2+1;
-            d = max(d, d2+1);
+            r = dfs(root->right);
         }
-        ans = max(ans, dd);
-        return d;
+        ans = max({ans, tmp+l+r});
+        return max(0, tmp + max(l, r));
     }
-    int diameterOfBinaryTree(TreeNode* root) {
+    int maxPathSum(TreeNode* root) {
         dfs(root);
         return ans;
     }
@@ -42,6 +37,6 @@ public:
 int main() {
     ios::sync_with_stdio(0); 
     cin.tie(0);
-
-    
+    // freopen("input.txt", "r", stdin); 
+    // freopen("output.txt", "w", stdout);
 }
